@@ -62,7 +62,7 @@ namespace visual_hyperinterval
                 u2 = (int)(Points[i + 1] * (pictureBox1.Height - 1) / MAX_EXPONENT_THREE);
 
                 // выполняем преобразование поворота и сдвиг
-                u1 = -u1 + (pictureBox1.Width - 1);
+                u2 = -u2 + (pictureBox1.Height - 1);
 
                 gr.DrawEllipse(bluePen, u1 - 5, u2 - 5, 2.0f * 5, 2.0f * 5);
                 gr.FillEllipse(redBrush, u1 - 5, u2 - 5, 2 * 5, 2 * 5);
