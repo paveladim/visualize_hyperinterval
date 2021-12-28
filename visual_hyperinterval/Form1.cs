@@ -13,7 +13,7 @@ namespace visual_hyperinterval
 {
     public partial class Form1 : Form
     {
-        private uint MAX_EXPONENT_THREE = 3486784401;
+        private double MAX_EXPONENT_THREE = 3486784401.0;
         private List<uint> Points = new List<uint>();
         private List<uint> PointsHyp = new List<uint>();
         public Form1()
@@ -59,8 +59,9 @@ namespace visual_hyperinterval
             SolidBrush whiteBrush = new SolidBrush(Color.White);
             SolidBrush redBrush = new SolidBrush(Color.Red);
             Pen blackPen = new Pen(Color.Black);
+            Pen blackPen2 = new Pen(Color.Black, 1);
             Pen bluePen = new Pen(Color.Blue);
-            gr.FillRectangle(whiteBrush, rect);
+            Pen bluePen2 = new Pen(Color.DarkBlue, 2);
             gr.DrawRectangle(blackPen, rect);
 
             int u1 = 0;
@@ -71,25 +72,23 @@ namespace visual_hyperinterval
             for (int i = 0; i < PointsHyp.Count - 3; i += 4)
             {
                 // считываем точку из списка и приводим её к координатам pictureBox1
-                u1 = (int)(PointsHyp[i] * (pictureBox1.Width - 1) / MAX_EXPONENT_THREE);
-                u2 = (int)(PointsHyp[i + 1] * (pictureBox1.Height - 1) / MAX_EXPONENT_THREE);
-                v1 = (int)(PointsHyp[i + 2] * (pictureBox1.Width - 1) / MAX_EXPONENT_THREE);
-                v2 = (int)(PointsHyp[i + 3] * (pictureBox1.Height - 1) / MAX_EXPONENT_THREE);
+                u1 = (int)((double)PointsHyp[i] / MAX_EXPONENT_THREE * (pictureBox1.Width - 1));
+                u2 = (int)((double)PointsHyp[i + 1] / MAX_EXPONENT_THREE * (pictureBox1.Height - 1));
+                v1 = (int)((double)PointsHyp[i + 2] / MAX_EXPONENT_THREE * (pictureBox1.Width - 1));
+                v2 = (int)((double)PointsHyp[i + 3] / MAX_EXPONENT_THREE * (pictureBox1.Height - 1));
 
                 // выполняем преобразование поворота и сдвиг
-                u2 = -u2 + (pictureBox1.Height - 1);
-                v2 = -v2 + (pictureBox1.Height - 1);
+                u2 = (pictureBox1.Height - 1) - u2;
+                v2 = (pictureBox1.Height - 1) - v2;
 
                 if ((u1 < v1) && (u2 < v2))
                 {
                     rect = new Rectangle(u1, u2, v1 - u1, v2 - u2);
-                    gr.FillRectangle(whiteBrush, rect);
                     gr.DrawRectangle(blackPen, rect);
                 }
                 else if ((v1 < u1) && (v2 < u2))
                 {
                     rect = new Rectangle(v1, v2, u1 - v1, u2 - v2);
-                    gr.FillRectangle(whiteBrush, rect);
                     gr.DrawRectangle(blackPen, rect);
                 } 
                 else if ((u1 < v1) && (u2 > v2))
@@ -99,7 +98,6 @@ namespace visual_hyperinterval
                     v1 = tmp;
 
                     rect = new Rectangle(v1, v2, u1 - v1, u2 - v2);
-                    gr.FillRectangle(whiteBrush, rect);
                     gr.DrawRectangle(blackPen, rect);
                 }
                 else if ((u1 > v1) && (u2 < v2))
@@ -109,7 +107,6 @@ namespace visual_hyperinterval
                     v1 = tmp;
 
                     rect = new Rectangle(u1, u2, v1 - u1, v2 - u2);
-                    gr.FillRectangle(whiteBrush, rect);
                     gr.DrawRectangle(blackPen, rect);
                 }
             }
@@ -117,16 +114,23 @@ namespace visual_hyperinterval
             for (int i = 0; i < Points.Count - 1; i += 2)
             {
                 // считываем точку из списка и приводим её к координатам pictureBox1
-                u1 = (int)(Points[i] * (pictureBox1.Width - 1) / MAX_EXPONENT_THREE);
-                u2 = (int)(Points[i + 1] * (pictureBox1.Height - 1) / MAX_EXPONENT_THREE);
+                u1 = (int)((double)Points[i] / MAX_EXPONENT_THREE * (pictureBox1.Width - 1));
+                u2 = (int)((double)Points[i + 1] / MAX_EXPONENT_THREE * (pictureBox1.Height - 1));
 
                 // выполняем преобразование поворота и сдвиг
-                u2 = -u2 + (pictureBox1.Height - 1);
+                u2 = (pictureBox1.Height - 1) - u2;
 
-                gr.DrawEllipse(bluePen, u1 - 3, u2 - 3, 2.0f * 3, 2.0f * 3);
-                gr.FillEllipse(redBrush, u1 - 3, u2 - 3, 2 * 3, 2 * 3);
-                gr.DrawEllipse(blackPen, u1 - 3, u2 - 3, 2 * 3, 2 * 3);
+                //gr.FillEllipse(redBrush, u1 - 3.0f, u2 - 3.0f, 3.0f * 2, 3.0f * 2);
+                //gr.DrawEllipse(bluePen2, u1 - 3.0f, u2 - 3.0f, 3.0f * 2, 3.0f * 2);
+
+                gr.FillEllipse(redBrush, u1 - 2.5f, u2 - 2.5f, 2.5f * 2, 2.5f * 2);
+                gr.DrawEllipse(blackPen2, u1 - 2.5f, u2 - 2.5f, 2.5f * 2, 2.5f * 2);
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
